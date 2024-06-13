@@ -945,3 +945,64 @@ select * from cliente where ciudad = 'Madrid' and codigo_empleado_rep_ventas in 
 
 
 select codigo_pedido , codigo_cliente , fecha_esperada fecha_entrega from pedido where ;
+
+
+--CONSULTAS MULTIPLES 
+--Listado con el nombre de cada cliente y el nombre y apellido de su representante de ventas.
+
+select c.nombre_cliente , e.nombre, e.apellido1
+from cliente c
+inner join empleado e on c.codigo_empleado_rep_ventas = e.codigo_empleado
+
+--Muestra el nombre de los clientes que hayan realizado pagos junto con el nombre de sus representantes de ventas 
+select c.nombre_cliente , e.nombre , e.apellido1
+from pago p
+inner join cliente c on p.codigo_cliente = c.codigo_cliente
+inner join empleado e on c.codigo_empleado_rep_ventas = e.codigo_empleado;
+
+-- Devuelve el nombre de los clientes que han hecho pagos y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante 
+
+select distinct c.nombre_cliente , e.nombre , e,apellido1 , o.ciudad 
+from pago p
+inner join cliente c on p.codigo_cliente = c.codigo_cliente 
+inner join empleado e on c.codigo_empleado_rep_ventas = e.codigo_empleado
+inner join oficina o on e.codigo_oficina = o.codigo_oficina ;
+
+-- Lista la direccion de las oficinas que tengan clientes en fuenlabra
+select distinct o.linea_direccion1 , o.linea_direccion2
+from cliente c
+inner join oficina o on c.codigo_empleado_rep_ventas = (select codigo_empleado from empleado e where e.codigo_oficina = o.codigo_oficina)
+where c.ciudad = 'Fuenlabrada';
+
+-- devuelve el nombre de los clientes y el nombre de sus representantes junto con la ciudad de la oficina a la que pertenece el representante
+
+select c.nombre_cliente , e.nombre , e.apellido1 , o.ciudad 
+from cliente c
+inner join empleado e on e.codigo_empleado_rep_ventas = e.codigo_empleado
+inner join oficina o on e.codigo_oficina = o.codigo_oficina;
+
+--Devuelve un listado con el nombre de los empleados junto con el nombre de sus jefes
+
+select e.nombre as 
+
+
+
+--devuelve un listado que muestre el nombre de cada empleado , el nombre de su jefe y el nombre del jefe de su jefe
+
+
+
+--devuelve el nombre de los clientes a los que no se les ha entregado a tiempo un pedido
+select c.nombre_cliente
+from cliente c
+inner join pedido p on c.codigo_cliente = p.codigo_cliente 
+where p.fecha_entrega > p.fecha_esperada or p.fecha_entrega is null;
+
+
+-- Devuelve un listado de las diferentes gamas de producto que ha comprado cada cliente .
+select distinct c.nombre_cliente , gp.gama
+from cliente c 
+inner join pedido p on c.codigo_cliente = p.codigo_cliente
+inner join detalle_pedido dp on p.codigo_pedido = dp_codigo_pedido
+inner join producto pr on dp.codigo_producto = pr.codigo_producto
+inner join gama_producto gp on pr.gama = gp.gama;
+
