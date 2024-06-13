@@ -982,12 +982,20 @@ inner join empleado e on e.codigo_empleado_rep_ventas = e.codigo_empleado
 inner join oficina o on e.codigo_oficina = o.codigo_oficina;
 
 --Devuelve un listado con el nombre de los empleados junto con el nombre de sus jefes
-
-select e.nombre as 
+SELECT e1.nombre AS empleado, e1.apellido1 AS empleado_apellido, e2.nombre AS jefe, e2.apellido1 AS jefe_apellido
+FROM empleado e1
+INNER JOIN empleado e2 ON e1.codigo_jefe = e2.codigo_empleado;
 
 
 
 --devuelve un listado que muestre el nombre de cada empleado , el nombre de su jefe y el nombre del jefe de su jefe
+
+SELECT e1.nombre AS empleado, e1.apellido1 AS empleado_apellido, 
+       e2.nombre AS jefe, e2.apellido1 AS jefe_apellido,
+       e3.nombre AS jefe_jefe, e3.apellido1 AS jefe_jefe_apellido
+FROM empleado e1
+INNER JOIN empleado e2 ON e1.codigo_jefe = e2.codigo_empleado
+LEFT JOIN empleado e3 ON e2.codigo_jefe = e3.codigo_empleado;
 
 
 
