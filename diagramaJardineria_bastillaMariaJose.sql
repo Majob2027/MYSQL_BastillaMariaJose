@@ -1014,3 +1014,13 @@ inner join detalle_pedido dp on p.codigo_pedido = dp_codigo_pedido
 inner join producto pr on dp.codigo_producto = pr.codigo_producto
 inner join gama_producto gp on pr.gama = gp.gama;
 
+
+SELECT columnas
+FROM tabla1
+INNER JOIN tabla2
+ON tabla1.columna_comun = tabla2.columna_comun;
+
+LEFT JOIN: Incluye todas las filas de la tabla de la izquierda y las filas coincidentes de la tabla de la derecha. Si no hay coincidencia, las filas de la derecha serán NULL.
+RIGHT JOIN: Incluye todas las filas de la tabla de la derecha y las filas coincidentes de la tabla de la izquierda. Si no hay coincidencia, las filas de la izquierda serán NULL.
+FULL JOIN: Incluye todas las filas cuando hay una coincidencia en una de las tablas. Las filas no coincidentes se completarán con NULL.
+
