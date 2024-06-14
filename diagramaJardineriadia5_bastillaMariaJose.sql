@@ -1063,10 +1063,119 @@ where precio_venta <= ALL(
 
 -- 1.4.8.3 Subconsultas con IN y NOT IN
 -- 11 Devuelve el nombre, apellido1 y cargo de los empleados que no representen a ningún cliente.
+SELECT nombre, apellido1, puesto
+FROM empleado
+WHERE codigo_empleado NOT IN (
+    SELECT codigo_empleado_rep_ventas
+    FROM cliente
+);
+
 -- 12 Devuelve un listado que muestre solamente los clientes que no han realizado ningún pago.
+SELECT nombre_cliente
+FROM cliente
+WHERE codigo_cliente NOT IN (
+    SELECT codigo_cliente
+    FROM pago
+);
+
 -- 13 Devuelve un listado que muestre solamente los clientes que sí han realizado algún pago.
+SELECT nombre_cliente
+FROM cliente
+WHERE codigo_cliente IN (
+    SELECT codigo_cliente
+    FROM pago
+);
+
 -- 14 Devuelve un listado de los productos que nunca han aparecido en un pedido.
+SELECT nombre
+FROM producto
+WHERE codigo_producto NOT IN (
+    SELECT codigo_producto
+    FROM detalle_pedido
+);
+
 -- 15 Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos empleados que no sean representante de ventas de ningún cliente.
+SELECT e.nombre, e.apellido1, e.apellido2, e.puesto, o.telefono
+FROM empleado e
+JOIN oficina o ON e.codigo_oficina = o.codigo_oficina
+WHERE e.codigo_empleado NOT IN (
+    SELECT codigo_empleado_rep_ventas
+    FROM cliente
+);
+
 -- 16 Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales.
 -- 17 Devuelve un listado con los clientes que han realizado algún pedido pero no han realizado ningún pago.
+
+SELECT DISTINCT c.nombre_cliente
+FROM cliente c
+WHERE c.codigo_cliente IN (
+    SELECT codigo_cliente
+    FROM pedido
+)
+AND c.codigo_cliente NOT IN (
+    SELECT codigo_cliente
+    FROM pago
+);
+-- 1.4.8.4 Subconsultas con EXISTS y NOT EXISTS
+-- 18 Devuelve un listado que muestre solamente los clientes que no han realizado ningún pago.
+SELECT nombre_cliente
+FROM cliente c
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM pago p
+    WHERE c.codigo_cliente = p.codigo_cliente
+);
+
+-- 19 Devuelve un listado que muestre solamente los clientes que sí han realizado algún pago.
+SELECT nombre_cliente
+FROM cliente c
+WHERE EXISTS (
+    SELECT 1
+    FROM pago p
+    WHERE c.codigo_cliente = p.codigo_cliente
+);
+
+
+-- 20 Devuelve un listado de los productos que nunca han aparecido en un pedido.
+SELECT nombre
+FROM producto p
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM detalle_pedido dp
+    WHERE p.codigo_producto = dp.codigo_producto
+);
+
+
+-- 21 Devuelve un listado de los productos que han aparecido en un pedido alguna vez.
+
+SELECT nombre
+FROM producto p
+WHERE EXISTS (
+    SELECT 1
+    FROM detalle_pedido dp
+    WHERE p.codigo_producto = dp.codigo_producto
+);
+
+-- 1.4.7 Consultas resumen
+-- 1 ¿Cuántos empleados hay en la compañía?
+-- 2 ¿Cuántos clientes tiene cada país?
+-- 3 ¿Cuál fue el pago medio en 2009?
+-- 4 ¿Cuántos pedidos hay en cada estado? Ordena el resultado de forma descendente por el número de pedidos.
+-- 5 Calcula el precio de venta del producto más caro y más barato en una misma consulta.
+-- 6 Calcula el número de clientes que tiene la empresa.
+-- 7 ¿Cuántos clientes existen con domicilio en la ciudad de Madrid?
+-- 8 ¿Calcula cuántos clientes tiene cada una de las ciudades que empiezan por M?
+-- 9 Devuelve el nombre de los representantes de ventas y el número de clientes al que atiende cada uno.
+-- 10 Calcula el número de clientes que no tiene asignado representante de ventas.
+-- 11 Calcula la fecha del primer y último pago realizado por cada uno de los clientes. El listado deberá mostrar el nombre y los apellidos de cada cliente.
+-- 12 Calcula el número de productos diferentes que hay en cada uno de los pedidos.
+-- 13 Calcula la suma de la cantidad total de todos los productos que aparecen en cada uno de los pedidos.
+-- 14 Devuelve un listado de los 20 productos más vendidos y el número total de unidades que se han vendido de cada uno. El listado deberá estar ordenado por el número total de unidades vendidas.
+-- 15 La facturación que ha tenido la empresa en toda la historia, indicando la base imponible, el IVA y el total facturado. La base imponible se calcula sumando el coste del producto por el número de unidades vendidas de la tabla detalle_pedido. El IVA es el 21 % de la base
+-- imponible, y el total la suma de los dos campos anteriores.
+-- 16 La misma información que en la pregunta anterior, pero agrupada por código de producto.
+-- 17 La misma información que en la pregunta anterior, pero agrupada por código de producto filtrada por los códigos que empiecen por OR.
+-- 18 Lista las ventas totales de los productos que hayan facturado más de 3000 euros. Se mostrará el nombre, unidades vendidas, total facturado y total facturado con impuestos (21% IVA).
+-- 19 Muestre la suma total de todos los pagos que se realizaron para cada uno de los años que aparecen en la tabla pagos.
+
 
